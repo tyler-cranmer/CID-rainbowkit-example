@@ -10,6 +10,7 @@ import {
   optimism,
   polygon,
   zora,
+  canto
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -17,6 +18,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
     polygon,
+    canto,
     optimism,
     arbitrum,
     zora,
