@@ -4,9 +4,13 @@ import { useContractRead } from 'wagmi';
 import { useAccount } from 'wagmi';
 import {addressRegistryAbi} from "../abis";
 import { readContract } from "wagmi/actions";
+import {useCID } from "../hooks/getCID"
+
 function CustomConnectButton() {
     const {address} = useAccount();
-    const name = 'Pikachu';
+    const {CID} = useCID(address!)
+
+    const displayName = CID?.baseName || address
 
   return (
     <ConnectButton.Custom>
@@ -91,7 +95,7 @@ function CustomConnectButton() {
                   </button>
 
                   <button onClick={openAccountModal} type='button'>
-                    {name}
+                    {displayName}
                     {account.displayBalance
                       ? ` (${account.displayBalance})`
                       : ''}

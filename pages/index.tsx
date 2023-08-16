@@ -4,157 +4,29 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import CustomConnectButton from './CustomConnectButton';
-import { addressRegistryAbi, namespaceAbi, cidNftAbi, bioAbi } from '../abis';
+import {
+  addressRegistryAbi,
+  namespaceAbi,
+  cidNftAbi,
+  pfpWrapperAbi,
+} from '../abis';
 import { useAccount } from 'wagmi';
 import { readContract } from 'wagmi/actions';
-import { fromHex } from 'viem';
 import { fontTransformer } from '../helpers';
-import { CID_NFT_CONTRACT, NAMESPACE_CONTRACT, BIO_CONTRACT, SUB_BIO } from '../constants';
+import {
+  CID_NFT_CONTRACT,
+  NAMESPACE_CONTRACT,
+  BIO_CONTRACT,
+  SUB_BIO,
+  ADDRESS_REGISTRY_CONTRACT,
+  SUB_PFP,
+  PFP_WRAPPER_CONTRACT,
+} from '../constants';
+import { erc721ABI } from 'wagmi';
+import { CIDType } from '../types';
+import { useCID } from '../hooks/getCID';
+
 const Home: NextPage = () => {
-  const { address } = useAccount();
-  const name = 'Pikachu';
-  const tyler = '0x035bC96201666333294C5A04395Bb3618a2b6A11';
-
-
-  useEffect(() => {
-    const getIdentities = async (address: string) => {
-      const IdentityContract = await readContract({
-        address: CID_NFT_CONTRACT,
-        abi: cidNftAbi,
-        functionName: 'balanceOf',
-        args: [address],
-      });
-      const data = IdentityContract as any;
-    if(!IdentityContract){
-      console.log(address)
-      return address
-      // Would return here.
-    }
-        const CIDS = [] as any[];
-        const balance = fromHex(data, 'number');
-        console.log('Balance', balance);
-        const tokensPromises = new Array(balance).fill(0).map((_, i) => {
-          return readContract({
-            address: CID_NFT_CONTRACT,
-            abi: cidNftAbi,
-            functionName: 'tokenOfOwnerByIndex',
-            args: [address!, i],
-          });
-        });
-        const tokens = await Promise.all(tokensPromises).then((data: any) => {
-          return data;
-        });
-        console.log("TOKENS", tokens);
-        tokens.forEach((t: any) => {
-          CIDS.push({
-            id: t,
-            namespace: null,
-            pfp: null,
-            bio: null
-          })
-        })
-        console.log("CIDS", CIDS)
-        const cidsNamespacesPromises = tokens.map((t: any) => {
-          return readContract({
-            address: CID_NFT_CONTRACT,
-            abi: cidNftAbi,
-            functionName: "getPrimaryData",
-            args: [t, "namespace"]
-          })
-        })
-        const cidsNamespaces = await Promise.all(cidsNamespacesPromises)
-        .then((data: any) => {
-          return data;
-        })
-        .catch((e) => {
-          return null;
-        });
-        console.log("CID NAMESPACES", cidsNamespaces )
-      const charPromises = cidsNamespaces.map((t: any) => {
-        return readContract({
-          address: NAMESPACE_CONTRACT,
-          abi: namespaceAbi,
-          functionName: "getNamespaceCharacters",
-          args: [t],
-        });
-      });
-      const chars = await Promise.allSettled(charPromises)
-      .then((data: any) => {
-        return data.map((result: any) => {
-          if (result.status === "fulfilled") {
-            return result.value;
-          } else {
-            console.error("Error:", result.reason);
-            return null;
-          }
-        });
-      })
-      .catch((e) => {
-        console.error("Error:", e);
-        return null;
-      });
-      console.log("chars", chars)
-      const namespaces = cidsNamespaces.map((t: any, i: number) => {
-        if (!chars[i]) return null;
-        const displayName = chars[i].map((c: any) => c).join("");
-        const baseName =
-          chars[i].map((c: any) => fontTransformer(c)).join("") + ".canto";
-        return { id: t, displayName, baseName };
-      });
-      namespaces.forEach((n: any, i: number) => {
-        CIDS[i].namespace = n;
-      });
-
-      const cidsBiosPromises = tokens.map((t: any) => {
-        return readContract({
-          address: CID_NFT_CONTRACT,
-          abi: cidNftAbi,
-          functionName: "getPrimaryData",
-          args: [t, SUB_BIO],
-        });
-      });
-      const cidsBios = await Promise.all(cidsBiosPromises)
-        .then((data: any) => {
-          return data;
-        })
-        .catch((e) => {
-          return null;
-        });
-
-      const bioPromises = cidsBios.map((t: any) => {
-        return readContract({
-          address: BIO_CONTRACT,
-          abi: bioAbi,
-          functionName: "bio",
-          args: [t],
-        });
-      });
-
-      const bios = await Promise.allSettled(bioPromises)
-        .then((data: any) => {
-          return data.map((result: any) => {
-            if (result.status === "fulfilled") {
-              return result.value;
-            } else {
-              console.error("Error:", result.reason);
-              return null;
-            }
-          });
-        })
-        .catch((e) => {
-          console.error("Error:", e);
-          return null;
-        });
-
-      bios.forEach((b: any, i: number) => {
-        CIDS[i].bio = b;
-      });
-
-      return CIDS
-      }
-    const a = getIdentities(address!)
-    console.log("HELOP", a);
-  });
 
   return (
     <div className={styles.container}>
@@ -170,7 +42,7 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <ConnectButton />
         <CustomConnectButton />
-        {/* <div>{!!address ? <p>data: {dataString}</p> : 'pink'}</div> */}
+
 
         <h1 className={styles.title}>
           Welcome to <a href=''>RainbowKit</a> + <a href=''>wagmi</a> +{' '}
