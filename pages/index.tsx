@@ -24,10 +24,9 @@ import {
 } from '../constants';
 import { erc721ABI } from 'wagmi';
 import { CIDType } from '../types';
-import { useCID } from '../hooks/getCID';
+import { useCID } from '../hooks/useCID';
 
 const Home: NextPage = () => {
-
   return (
     <div className={styles.container}>
       <Head>
@@ -42,7 +41,6 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <ConnectButton />
         <CustomConnectButton />
-
 
         <h1 className={styles.title}>
           Welcome to <a href=''>RainbowKit</a> + <a href=''>wagmi</a> +{' '}

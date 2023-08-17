@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useContractRead } from 'wagmi';
 import { useAccount } from 'wagmi';
-import {addressRegistryAbi} from "../abis";
-import { readContract } from "wagmi/actions";
-import {useCID } from "../hooks/getCID"
+import { addressRegistryAbi } from '../abis';
+import { readContract } from 'wagmi/actions';
+import { useCID } from '../hooks/useCID';
 
 function CustomConnectButton() {
-    const {address} = useAccount();
-    const {CID} = useCID(address!)
+  const { address } = useAccount();
+  const { CID } = useCID(address!);
 
-    const displayName = CID?.baseName || address
+  const displayName = CID?.baseName || address;
 
   return (
     <ConnectButton.Custom>
@@ -32,9 +32,6 @@ function CustomConnectButton() {
           account &&
           chain &&
           (!authenticationStatus || authenticationStatus === 'authenticated');
-
-       
-       
 
         return (
           <div
