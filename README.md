@@ -1,18 +1,23 @@
 This is a basic raindbowkit app that utilizes the useCID hook to obtain user CID info. 
 
-## Notable folders and files:
+## Notable Folders and Files:
 
-/abis 
+- `/abis`
     - contains all the abis needed.
-/constants
-    - contains contract addresses, emojis and namespace characters.
-/helpers
+
+- `/constants`
+    - contains contract addresses, emojis, and namespace characters.
+
+- `/helpers`
     - namespace character converter for baseName.
-/hooks
-    - useCID.ts hook to grab the CID profile pic and namespace names. 
-    - comments provided about implementation.
-types.ts
-    - has types for hook
+
+- `/hooks`
+    - `useCID.ts`: a hook to grab the CID profile pic and namespace names.
+        - comments provided about implementation.
+
+- `types.ts`
+    - has types for the hook.
+
 
 ## Getting Started
 
