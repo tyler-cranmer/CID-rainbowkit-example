@@ -1,4 +1,18 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](https://github.com/rainbow-me/rainbowkit/tree/main/packages/create-rainbowkit).
+This is a basic raindbowkit app that utilizes the useCID hook to obtain user CID info. 
+
+## Notable folders and files:
+
+/abis 
+    - contains all the abis needed.
+/constants
+    - contains contract addresses, emojis and namespace characters.
+/helpers
+    - namespace character converter for baseName.
+/hooks
+    - useCID.ts hook to grab the CID profile pic and namespace names. 
+    - comments provided about implementation.
+types.ts
+    - has types for hook
 
 ## Getting Started
 
